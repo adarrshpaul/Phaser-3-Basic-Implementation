@@ -20,7 +20,7 @@ class GameScene extends Scene {
       true,
       true
     );
-    this.matter.world.setGravity(0, 3.2);
+    this.matter.world.setGravity(0, 3.4);
     /**Camera color to be decided */
     //this.cameras.main.setBackgroundColor(100, 159, 149);
     /**Ball asset intialized */
@@ -88,29 +88,38 @@ class GameScene extends Scene {
     /** Adding the tile maps */
     this.map = this.make.tilemap({ key: "map" });
 
-    /**Create groundLayer */
-    this.groundTiles = this.map.addTilesetImage("tiles");
+    /**Create worldLayer */
+    this.worldTiles = this.map.addTilesetImage("tiles");
     this.coinTiles = this.map.addTilesetImage("coin");
-    this.groundLayer = this.map.createDynamicLayer(
+    this.worldLayer = this.map.createDynamicLayer(
       "World",
-      [this.groundTiles, this.coinTiles],
+      [this.worldTiles, this.coinTiles],
       0,
       0
     );
     /** Setting the layer !! */
-    this.groundLayer.setCollisionByProperty({ collides: true });
-    
+    this.worldLayer.setCollisionByProperty({ collides: true });
+    /** Creating a ground Layer */
+    this.groundLayer = this.map.createDynamicLayer(
+      "Ground",
+      this.worldTiles,
+      0,
+      -70
+    );
+    /**Adding a ground rectangle */
+    this.groundRectangle = this.matter.add.rectangle(0, game.config.height - 230/2  , 10000, 230, { shape: "rectangle", isStatic: true, label: "ground" }); 
     /**Creating the blue BG */
     this.blueTiles = this.map.addTilesetImage("blue");
     this.skyLayer = this.map.createStaticLayer("BG", this.blueTiles, 0, -70);
-    console.log("skyLayer",this.skyLayer)
+
     /**Creating a new layer, for traps */
     this.trapLayer = this.map.createBlankDynamicLayer(
       "trap",
-      this.groundTiles,
+      this.worldTiles,
       0,
       0
     );
+      
     /**Dynamically adding the no-zone - to reduce life */
     this.indexOfWarnTile = 7;
     this.trapLayer.fill(this.indexOfWarnTile, 24, 9, 1, 2);
@@ -123,16 +132,19 @@ class GameScene extends Scene {
       0,
       0
     );
+    
     /**Dynamically adding the coins !! */
     /**Getting the first index */
-    this.firstIndex = this.groundLayer.tileset[1].firstgid;
+    this.firstIndex = this.worldLayer.tileset[1].firstgid;
     this.indexOfCoinTile = this.firstIndex;
+
     /**Random Coins on ground*/
     for (let i = 0; i < 3; i++) {
       let coinsX = Phaser.Math.Between(2, 17);
       this.coinLayer.fill(this.indexOfCoinTile, coinsX, 10, 1, 1);
       this.coinLayer.setCollision(this.indexOfCoinTile);
     }
+
     /** Random Coins up */
     for (let i = 0; i < 2; i++) {
       let coinsX = Phaser.Math.Between(6, 13);
@@ -142,14 +154,15 @@ class GameScene extends Scene {
     this.coinsX = Phaser.Math.Between(18, 20);
     this.coinLayer.fill(this.indexOfCoinTile, this.coinsX, 1, 1, 1);
     this.coinLayer.setCollision(this.indexOfCoinTile);
+
     /** Random Coins up */
     this.coinsX = Phaser.Math.Between(27, 30);
     this.coinLayer.fill(this.indexOfCoinTile, this.coinsX, 4, 1, 1);
     this.coinLayer.setCollision(this.indexOfCoinTile);
 
     /**Add the tile map to the world */
-    this.matter.world.convertTilemapLayer(this.groundLayer, {
-      label: "ground",
+    this.matter.world.convertTilemapLayer(this.worldLayer, {
+      label: "world",
     });
     this.matter.world.convertTilemapLayer(this.trapLayer, { label: "trap" });
     this.matter.world.convertTilemapLayer(this.coinLayer, {
@@ -254,8 +267,11 @@ class GameScene extends Scene {
 
     /**Listening to the matter lib, events*/
     this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
-      if (bodyA.label === "ground" || bodyB.label === "ground") {
+      if (bodyA.label === "world" || bodyB.label === "world") {
         // this.bounce.play();
+      }
+      if (bodyA.label === "ground" || bodyB.label === "ground") {
+         this.bounce.play();
       }
       if (bodyA.label === "coin" || bodyB.label === "coin") {
         if (bodyA.label === "coin") {
@@ -305,12 +321,14 @@ class GameScene extends Scene {
     this.scoreText.setText(`Score : ${this.score}`);
     this.lifeText.setText(`Life : ${this.life}`);
     if (this.life === 0) {
+      this.sound.stopAll();
       this.scene.restart();
     }
     console.log(this.score);
     if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
       this.rotateText.setText("Please rotate the screen to landscape!!");
       this.pauseBg.setVisible(true);
+      this.sound.stopAll();
       this.scene.pause();
     }
   }

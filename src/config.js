@@ -8,10 +8,10 @@ import { sceneConfig } from "./sceneConfigPreload";
 import { sceneConfigMenu } from "./sceneConfigMenu";
 import { sceneConfigScoreBack } from "./sceneConfigScoreBackToMainPage";
 const config = {
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   parent: "root",
   width: 2100,
-  height: 1000,
+  height: 1001,
   // resolution: window.devicePixelRatio,
   scene: [
     new preload(sceneConfig),

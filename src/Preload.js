@@ -56,6 +56,11 @@ class Preload extends Scene {
     });
     this.load.image("clouds", "src/assets/GraphicsGame/GamePlay/CloudsV2.png");
     this.load.image("blue", "src/assets/GraphicsGame/GamePlay/blue.png");
+    this.load.spritesheet("fire", "src/assets/GraphicsGame/GamePlay/fire1.png",
+    {
+      frameWidth: 40,
+      frameHeight: 70,
+    });
     /**Load Audio files */
     this.load.audio('up',"src/assets/AudioGame/upSound.mp3");
     this.load.audio('out',"src/assets/AudioGame/out.mp3");

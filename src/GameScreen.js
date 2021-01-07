@@ -31,7 +31,7 @@ class GameScene extends Scene {
     });
     this.ball.setBounce(0.7);
     this.ball.setDepth(999);
-    this.ball.setScale(0.65)
+    this.ball.setScale(0.62)
     this.ball.setFrictionStatic(6);
     /**Add key events */
     this.keys = this.input.keyboard.addKeys({
@@ -88,19 +88,11 @@ class GameScene extends Scene {
     /** Adding the tile maps */
     this.map = this.make.tilemap({ key: "map" });
 
-    /**Create worldLayer */
+    /**Decalaring tiles */
     this.worldTiles = this.map.addTilesetImage("tiles");
     this.coinTiles = this.map.addTilesetImage("coin");
     this.cloudTile =  this.map.addTilesetImage("clouds");
-    console.log(this.cloudTile);
-    this.worldLayer = this.map.createDynamicLayer(
-      "World",
-      [this.worldTiles, this.coinTiles],
-      0,
-      0
-    );
-    /** Setting the layer !! */
-    this.worldLayer.setCollisionByProperty({ collides: true });
+   
     /** Creating a ground Layer */
     this.groundLayer = this.map.createDynamicLayer(
       "Ground",
@@ -121,6 +113,15 @@ class GameScene extends Scene {
       0,
       0
     );
+    /**Creating a world Layer */
+    this.worldLayer = this.map.createDynamicLayer(
+      "World",
+      [this.worldTiles, this.coinTiles],
+      0,
+      0
+    );
+    /** Setting the layer !! */
+    this.worldLayer.setCollisionByProperty({ collides: true });
     /**Creating a new layer, for traps */
     this.trapLayer = this.map.createBlankDynamicLayer(
       "trap",
@@ -148,11 +149,14 @@ class GameScene extends Scene {
     this.indexOfCoinTile = this.firstIndex;
 
     /**Random Coins on ground*/
-    for (let i = 0; i < 3; i++) {
-      let coinsX = Phaser.Math.Between(2, 17);
+    for (let i = 0; i < 2; i++) {
+      let coinsX = Phaser.Math.Between(5, 17);
       this.coinLayer.fill(this.indexOfCoinTile, coinsX, 10, 1, 1);
       this.coinLayer.setCollision(this.indexOfCoinTile);
     }
+    let coinsX = Phaser.Math.Between(20, 30);
+    this.coinLayer.fill(this.indexOfCoinTile, coinsX, 10, 1, 1);
+    this.coinLayer.setCollision(this.indexOfCoinTile); 
 
     /** Random Coins up */
     for (let i = 0; i < 2; i++) {
@@ -178,7 +182,30 @@ class GameScene extends Scene {
       label: "coin",
       isSensor: true,
     });
-
+    /**Animation Fire */
+    this.fire1 =  this.add.sprite(
+      37*70,
+      7*70,
+      "fire"
+    ).setScale(1.5);
+    this.fire =  this.add.sprite(
+      38*70,
+      7*70,
+      "fire"
+    );
+    this.fire.setScale(1.5);
+    this.anims.create({
+      key: 'fire',
+      frames: this.anims.generateFrameNumbers('fire', {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 24,
+      repeat: -1
+    });
+    this.fire.anims.play('fire');
+    this.fire1.anims.play('fire');
+    
     /**Adding the gamePad */
     this.gamePad = this.add
       .image(220, game.config.height - 220, "gamePad")

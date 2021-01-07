@@ -22,6 +22,8 @@ class GameScene extends Scene {
     );
     this.matter.world.setGravity(0, 3.4);
     /**Camera color to be decided */
+    /**Increase quality of sprites rendered */  
+    this.cameras.main.roundPixels = true; 
     //this.cameras.main.setBackgroundColor(100, 159, 149);
     /**Ball asset intialized */
     this.ball = this.matter.add.image(271, 468, "ball", null, {
@@ -90,6 +92,7 @@ class GameScene extends Scene {
 
     /**Decalaring tiles */
     this.worldTiles = this.map.addTilesetImage("tiles");
+    console.log(this.worldTiles);
     this.coinTiles = this.map.addTilesetImage("coin");
     this.cloudTile =  this.map.addTilesetImage("clouds");
     /**Creating the blue BG */

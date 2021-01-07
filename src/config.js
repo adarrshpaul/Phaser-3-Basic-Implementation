@@ -13,6 +13,7 @@ const config = {
   width: 2100,
   height: 1001,
   // resolution: window.devicePixelRatio,
+  roundPixels: true,
   scene: [
     new preload(sceneConfig),
     new menu_page(sceneConfigMenu),

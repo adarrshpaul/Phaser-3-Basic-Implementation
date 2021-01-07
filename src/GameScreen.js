@@ -29,10 +29,10 @@ class GameScene extends Scene {
       shape: { type: "circle", width: 125, height: 125 },
       label: "ball",
     });
-    this.ball.setBounce(0.7);
+    this.ball.setBounce(0.6);
     this.ball.setDepth(999);
     this.ball.setScale(0.62)
-    this.ball.setFrictionStatic(6);
+    this.ball.setFrictionStatic(1);
     /**Add key events */
     this.keys = this.input.keyboard.addKeys({
       up: 'up',
@@ -92,34 +92,32 @@ class GameScene extends Scene {
     this.worldTiles = this.map.addTilesetImage("tiles");
     this.coinTiles = this.map.addTilesetImage("coin");
     this.cloudTile =  this.map.addTilesetImage("clouds");
-   
+    /**Creating the blue BG */
+       this.blueTiles = this.map.addTilesetImage("blue");
+       this.skyLayer = this.map.createStaticLayer("BG", this.blueTiles, 0, -70);
     /** Creating a ground Layer */
     this.groundLayer = this.map.createDynamicLayer(
       "Ground",
       this.worldTiles,
       0,
-      -70
+      0
     );
+     /**Creating a world Layer */
+     this.worldLayer = this.map.createDynamicLayer(
+       "World",
+       [this.worldTiles, this.coinTiles],
+       0,
+       0
+     );
     /**Adding a ground rectangle */
-    this.groundRectangle = this.matter.add.rectangle(0, game.config.height - 230/2  , 10000, 230, { shape: "rectangle", isStatic: true, label: "ground" }); 
-    /**Creating the blue BG */
-    this.blueTiles = this.map.addTilesetImage("blue");
-    this.skyLayer = this.map.createStaticLayer("BG", this.blueTiles, 0, -70);
-
-    /**Creating the cloud layer */
-    this.cloudlayer = this.map.createDynamicLayer(
-      "Clouds",
-      this.cloudTile,
-      0,
-      0
-    );
-    /**Creating a world Layer */
-    this.worldLayer = this.map.createDynamicLayer(
-      "World",
-      [this.worldTiles, this.coinTiles],
-      0,
-      0
-    );
+    this.groundRectangle = this.matter.add.rectangle(0, game.config.height - 160/2  , 10000, 160, { shape: "rectangle", isStatic: true, label: "ground" }); 
+     /**Creating the cloud layer */
+     this.cloudlayer = this.map.createDynamicLayer(
+       "Clouds",
+       this.cloudTile,
+       0,
+       0
+     );    
     /** Setting the layer !! */
     this.worldLayer.setCollisionByProperty({ collides: true });
     /**Creating a new layer, for traps */
@@ -127,7 +125,7 @@ class GameScene extends Scene {
       "trap",
       this.worldTiles,
       0,
-      0
+      70
     );
       
     /**Dynamically adding the no-zone - to reduce life */
@@ -151,11 +149,11 @@ class GameScene extends Scene {
     /**Random Coins on ground*/
     for (let i = 0; i < 2; i++) {
       let coinsX = Phaser.Math.Between(5, 17);
-      this.coinLayer.fill(this.indexOfCoinTile, coinsX, 10, 1, 1);
+      this.coinLayer.fill(this.indexOfCoinTile, coinsX, 11, 1, 1);
       this.coinLayer.setCollision(this.indexOfCoinTile);
     }
     let coinsX = Phaser.Math.Between(20, 30);
-    this.coinLayer.fill(this.indexOfCoinTile, coinsX, 10, 1, 1);
+    this.coinLayer.fill(this.indexOfCoinTile, coinsX, 11, 1, 1);
     this.coinLayer.setCollision(this.indexOfCoinTile); 
 
     /** Random Coins up */

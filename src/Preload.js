@@ -54,6 +54,7 @@ class Preload extends Scene {
       frameWidth: 70,
       frameHeight: 70,
     });
+    this.load.image("clouds", "src/assets/GraphicsGame/GamePlay/CloudsV2.png");
     this.load.image("blue", "src/assets/GraphicsGame/GamePlay/blue.png");
     /**Load Audio files */
     this.load.audio('up',"src/assets/AudioGame/upSound.mp3");

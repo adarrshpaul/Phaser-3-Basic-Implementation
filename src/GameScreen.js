@@ -29,10 +29,10 @@ class GameScene extends Scene {
       shape: { type: "circle", width: 125, height: 125 },
       label: "ball",
     });
-    this.ball.setBounce(0.6);
+    this.ball.setBounce(0.7);
     this.ball.setDepth(999);
-    this.ball.setScale(0.8)
-    // this.ball.setFrictionStatic(6);
+    this.ball.setScale(0.65)
+    this.ball.setFrictionStatic(6);
     /**Add key events */
     this.keys = this.input.keyboard.addKeys({
       up: 'up',
@@ -91,6 +91,8 @@ class GameScene extends Scene {
     /**Create worldLayer */
     this.worldTiles = this.map.addTilesetImage("tiles");
     this.coinTiles = this.map.addTilesetImage("coin");
+    this.cloudTile =  this.map.addTilesetImage("clouds");
+    console.log(this.cloudTile);
     this.worldLayer = this.map.createDynamicLayer(
       "World",
       [this.worldTiles, this.coinTiles],
@@ -112,6 +114,13 @@ class GameScene extends Scene {
     this.blueTiles = this.map.addTilesetImage("blue");
     this.skyLayer = this.map.createStaticLayer("BG", this.blueTiles, 0, -70);
 
+    /**Creating the cloud layer */
+    this.cloudlayer = this.map.createDynamicLayer(
+      "Clouds",
+      this.cloudTile,
+      0,
+      0
+    );
     /**Creating a new layer, for traps */
     this.trapLayer = this.map.createBlankDynamicLayer(
       "trap",

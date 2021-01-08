@@ -362,12 +362,12 @@ class GameScene extends Scene {
       this.scene.restart();
     }
     console.log(this.score);
-    if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
-      this.rotateText.setText("Please rotate the screen to landscape!!");
-      this.pauseBg.setVisible(true);
-      this.sound.stopAll();
-      this.scene.pause();
-    }
+    // if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
+    //   this.rotateText.setText("Please rotate the screen to landscape!!");
+    //   this.pauseBg.setVisible(true);
+    //   this.sound.stopAll();
+    //   this.scene.pause();
+    // }
   }
   scoreUpdate(body) {
     this.score = this.score + 1;

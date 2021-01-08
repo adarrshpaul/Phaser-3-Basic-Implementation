@@ -323,17 +323,17 @@ class GameScene extends Scene {
       // this.cameras.main.shake(18);
     });
     /**Listening to orientation changed */
-    this.scale.on("orientationchange", (orientation) => {
-      if (orientation === Phaser.Scale.PORTRAIT) {
-        this.rotateText.setText("Please rotate the screen to landscape !!");
-        this.pauseBg.setVisible(true);
-        this.scene.pause();
-      } else if (orientation === Phaser.Scale.LANDSCAPE) {
-        this.scene.resume();
-        this.rotateText.setText("");
-        this.pauseBg.setVisible(false);
-      }
-    });
+    // this.scale.on("orientationchange", (orientation) => {
+    //   if (orientation === Phaser.Scale.PORTRAIT) {
+    //     this.rotateText.setText("Please rotate the screen to landscape !!");
+    //     this.pauseBg.setVisible(true);
+    //     this.scene.pause();
+    //   } else if (orientation === Phaser.Scale.LANDSCAPE) {
+    //     this.scene.resume();
+    //     this.rotateText.setText("");
+    //     this.pauseBg.setVisible(false);
+    //   }
+    // });
   }
   update() {
     //   if (Math.round(this.ball.body.position.x) > game.config.width) {

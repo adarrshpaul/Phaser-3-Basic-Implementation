@@ -91,17 +91,17 @@ class Preload extends Scene {
     this.loadingBarBgY = game.config.height / 2 + 100;
     this.loadingBar = this.scene.add
       .image(this.loadingBarBgX - 122, this.loadingBarBgY, "LoadingBar")
-      .setScale(0.14, 0.23)
+      .setScale(1.59, 2.3)
       .setOrigin(0, 0);
-    //  this.loadingBar.scaleX=percentage;
-    this.loadingBar.setCrop(0, 0, 11700 * percentage, 200);
+     // this.loadingBar.scaleX=percentage;
+    this.loadingBar.setCrop(0, 0, 1000 * percentage, 200);
     percentage = percentage * 100;
     
     console.log(this.loadingBar)
     //Adding Loading Bar Bg
     var loadingBarBg = this.scene.add
       .image(this.loadingBarBgX - 136, this.loadingBarBgY - 17, "LoadingBarBg")
-      .setScale(0.14, 0.2)
+      .setScale(1.6, 2.3)
       .setOrigin(0, 0);
 
     console.log("Loading..." + percentage);

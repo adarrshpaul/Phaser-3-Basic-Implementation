@@ -12,7 +12,7 @@ const sceneConfig = {
       {
         type: "image",
         key: "LoadingBar",
-        url: "src/assets/GraphicsGame/Loading/Fillbar.png",
+        url: "src/assets/GraphicsGame/Loading/Fillbar1.png",
       },
       { type: "image", key: "title", url: "src/assets/GraphicsGame/Title.png" },
       {
@@ -23,7 +23,7 @@ const sceneConfig = {
       {
         type: "image",
         key: "LoadingBarBg",
-        url: "src/assets/GraphicsGame/Loading/FillbarBg.png",
+        url: "src/assets/GraphicsGame/Loading/FillbarBg1.png",
       },
     ],
   },

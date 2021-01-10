@@ -92,12 +92,12 @@ class GameScene extends Scene {
 
     /**Decalaring tiles */
     this.worldTiles = this.map.addTilesetImage("tiles");
-    console.log(this.worldTiles);
+
     this.coinTiles = this.map.addTilesetImage("coin");
     this.cloudTile =  this.map.addTilesetImage("clouds");
     /**Creating the blue BG */
        this.blueTiles = this.map.addTilesetImage("blue");
-       this.skyLayer = this.map.createStaticLayer("BG", this.blueTiles, 0, -70);
+       this.skyLayer = this.map.createDynamicLayer("BG", this.blueTiles, 0, -70);
     /** Creating a ground Layer */
     this.groundLayer = this.map.createDynamicLayer(
       "Ground",
@@ -184,16 +184,25 @@ class GameScene extends Scene {
       isSensor: true,
     });
     /**Animation Fire */
-    this.fire1 =  this.add.sprite(
-      37*70,
-      7*70,
-      "fire"
-    ).setScale(1.5);
     this.fire =  this.add.sprite(
       38*70,
       7*70,
       "fire"
     );
+    let fireGroupConfig = {
+        classType: Phaser.GameObjects.Sprite,
+        defaultKey: null,
+        defaultFrame: null,
+        active: true,
+    }
+    this.fireGroup = this.add.group(fireGroupConfig);
+
+    this.fire1 =  this.add.sprite(
+      37*70,
+      7*70,
+      "fire"
+    ).setScale(1.5);
+
     this.fire.setScale(1.5);
     this.anims.create({
       key: 'fire',
@@ -212,7 +221,7 @@ class GameScene extends Scene {
       .image(220, game.config.height - 220, "gamePad")
       .setScrollFactor(0, 0)
       .setDepth(1000);
-    console.log(this.gamePad);
+
     /**Add Buttons */
     this.leftButton = this.add
       .image(
@@ -252,6 +261,7 @@ class GameScene extends Scene {
       .setDepth(1000);
 
     /** Defining the game controlls of the game object */
+    
     this.leftButton.on("pointerdown", () => {
       this.left();
     });
@@ -269,7 +279,7 @@ class GameScene extends Scene {
     this.cameras.main.setBounds(
       0,
       0,
-      game.config.width + 1000000,
+      this.worldLayer.width,
       game.config.height
     );
     this.cameras.main.startFollow(
@@ -318,10 +328,22 @@ class GameScene extends Scene {
         }
       }
       if (bodyA.label === "trap" || bodyB.label === "trap") {
+        this.cameras.main.shake(120);
         this.lifeUpdate();
       }
-      // this.cameras.main.shake(18);
+
     });
+    // console.log(this.worldLayer)
+    // this.cameras.main.pan(
+    //   2200, 
+    //   this.ball.y - 1000,
+    //   3000,
+    //   "Expo.easeInOut"
+    // );
+    // this.cameras.main.zoomTo(2,3000,'Expo');
+    
+    // this.cameras.main.centerOn(this.ball.x,this.ball.y);
+
     /**Listening to orientation changed */
     // this.scale.on("orientationchange", (orientation) => {
     //   if (orientation === Phaser.Scale.PORTRAIT) {
@@ -338,10 +360,10 @@ class GameScene extends Scene {
   update() {
     //   if (Math.round(this.ball.body.position.x) > game.config.width) {
     //   }
+
     if(!this.bgSound.isPlaying){
       this.bgSound.play();
-    }
-
+    }   
     if(this.keys.down.isDown){
     this.down();
     }
@@ -361,7 +383,7 @@ class GameScene extends Scene {
       this.sound.stopAll();
       this.scene.restart();
     }
-    console.log(this.score);
+
     // if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
     //   this.rotateText.setText("Please rotate the screen to landscape!!");
     //   this.pauseBg.setVisible(true);
@@ -371,7 +393,7 @@ class GameScene extends Scene {
   }
   scoreUpdate(body) {
     this.score = this.score + 1;
-    console.log(body);
+
     let positionX = body.position.x;
     let positionY = body.position.y;
     this.coinLayer.removeTileAtWorldXY(positionX, positionY);
@@ -383,12 +405,11 @@ class GameScene extends Scene {
     this.ball.x =  271;
     this.ball.y = 468;
     this.outSound.play();
-    
   }
   
   up() {
-    this.ball.setVelocityY(-29);
     this.upSound.play();
+    this.ball.setVelocityY(-29);
   }
   down(){
     this.ball.setVelocityY(29);

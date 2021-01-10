@@ -8,10 +8,8 @@ class Preload extends Scene {
     console.log("Preload");
   }
   preload() {
-    for(let i =0; i < 10; i++){
-      this.load.image("ball", "src/assets/GraphicsGame/GamePlay/redball.png");
-    }
 
+    this.load.image("ball", "src/assets/GraphicsGame/GamePlay/redball.png");
 
     this.load.image(
       "gamePad",
@@ -97,7 +95,6 @@ class Preload extends Scene {
     this.loadingBar.setCrop(0, 0, 1000 * percentage, 200);
     percentage = percentage * 100;
     
-    console.log(this.loadingBar)
     //Adding Loading Bar Bg
     var loadingBarBg = this.scene.add
       .image(this.loadingBarBgX - 136, this.loadingBarBgY - 17, "LoadingBarBg")

@@ -52,6 +52,7 @@ class Preload extends Scene {
       frameWidth: 70,
       frameHeight: 70,
     });
+    this.load.image('love', 'src/assets/GraphicsGame/GamePlay/love.png');
     this.load.image("clouds", "src/assets/GraphicsGame/GamePlay/CloudsV2.png");
     this.load.image("blue", "src/assets/GraphicsGame/GamePlay/blue.png");
     this.load.spritesheet("fire", "src/assets/GraphicsGame/GamePlay/fire1.png",

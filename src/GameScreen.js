@@ -133,7 +133,7 @@ class GameScene extends Scene {
       
     /**Dynamically adding the no-zone - to reduce life */
     this.indexOfWarnTile = 7;
-    this.trapLayer.fill(this.indexOfWarnTile, 24, 9, 1, 2);
+    this.trapLayer.fill(this.indexOfWarnTile, 24, 9, 1, 2); //1 rows and 2 columns
     this.trapLayer.setCollision(this.indexOfWarnTile);
 
     /**Adding the coins from the tileset */
@@ -187,35 +187,33 @@ class GameScene extends Scene {
     this.fire =  this.add.sprite(
       38*70,
       7*70,
-      "fire"
-    );
-    let fireGroupConfig = {
-        classType: Phaser.GameObjects.Sprite,
-        defaultKey: null,
-        defaultFrame: null,
-        active: true,
-    }
-    this.fireGroup = this.add.group(fireGroupConfig);
+      "fire",
+    ).setScale(2).setOrigin(0.5,0);
 
     this.fire1 =  this.add.sprite(
-      37*70,
+      42*70,
       7*70,
       "fire"
-    ).setScale(1.5);
+    ).setScale(2).setOrigin(0.5,0);
 
-    this.fire.setScale(1.5);
     this.anims.create({
       key: 'fire',
       frames: this.anims.generateFrameNumbers('fire', {
         start: 0,
         end: 5,
       }),
-      frameRate: 24,
+      frameRate: 27,
       repeat: -1
     });
     this.fire.anims.play('fire');
     this.fire1.anims.play('fire');
+    this.fireArray = [this.fire, this.fire1];
+    this.matter.add.gameObject(this.fire, {label: "fire",isSensor:true , gravityScale: {x:0,y:0}})
     
+    this.matter.add.gameObject(this.fire1,{label:'fire', isSensor:true, gravityScale: {x:0,y:0}}); 
+    /**Adding the life */
+    this.lifeImage = this.add.image(40*70, 10*70,'love').setScale(2).setOrigin(0.5, 0);
+    this.matter.add.gameObject(this.lifeImage, {label:'life', isSensor:true, gravityScale: {x:0,y:0}}); 
     /**Adding the gamePad */
     this.gamePad = this.add
       .image(220, game.config.height - 220, "gamePad")
@@ -282,15 +280,17 @@ class GameScene extends Scene {
       this.worldLayer.width,
       game.config.height
     );
+    /**Camera follwing the ball */
     this.cameras.main.startFollow(
       this.ball,
       null,
       1,
       1,
-      game.config.width / 2 - this.ball.width
+      game.config.width / 2 - this.ball.width //Offset
     );
     this.pauseBg = this.add.image(0, 0, "pauseBg").setOrigin(0);
     this.pauseBg.setVisible(false);
+    /**The time */
     /**Decalring the rotate text */
     this.rotateText = this.add
       .text(game.config.width / 2, game.config.height / 2, "", {
@@ -327,9 +327,19 @@ class GameScene extends Scene {
           this.scoreUpdate(bodyB);
         }
       }
-      if (bodyA.label === "trap" || bodyB.label === "trap") {
+      if (bodyA.label === "trap" || bodyB.label === "trap" ) {
         this.cameras.main.shake(120);
         this.lifeUpdate();
+      }
+      if (bodyA.label === "fire" || bodyB.label === "fire" ) {
+        this.lifeUpdate();
+      }
+      if (bodyA.label === "life" || bodyB.label === "life" ) {
+        if (bodyA.label === "life") {
+          this.lifeUp(bodyA);
+        } else {
+          this.lifeUp(bodyB);
+        }
       }
 
     });
@@ -358,8 +368,6 @@ class GameScene extends Scene {
     // });
   }
   update() {
-    //   if (Math.round(this.ball.body.position.x) > game.config.width) {
-    //   }
 
     if(!this.bgSound.isPlaying){
       this.bgSound.play();
@@ -398,6 +406,12 @@ class GameScene extends Scene {
     let positionY = body.position.y;
     this.coinLayer.removeTileAtWorldXY(positionX, positionY);
     this.matter.world.remove(body);
+    this.scoreSound.play();
+  }
+  lifeUp(body) {
+    this.life = this.life + 1;
+    console.log(body);
+    this.lifeImage.destroy();
     this.scoreSound.play();
   }
   lifeUpdate(){

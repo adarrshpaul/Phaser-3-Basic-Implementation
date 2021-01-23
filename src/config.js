@@ -8,7 +8,7 @@ import { sceneConfig } from "./sceneConfigPreload";
 import { sceneConfigMenu } from "./sceneConfigMenu";
 import { sceneConfigScoreBack } from "./sceneConfigScoreBackToMainPage";
 const config = {
-  type: Phaser.WEBGL,
+  type: Phaser.AUTO,
   parent: "root",
   width: 2100,
   height: 1001,
@@ -31,10 +31,10 @@ const config = {
     default: "matter",
     matter: {
       gravity: { y: 0 },
-      // debug: {
-      //   showBody: true,
-      //   showStaticBody: true,
-      // },
+       debug: {
+         showBody: true,
+         showStaticBody: true,
+       },
     },
   },
 };

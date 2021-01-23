@@ -177,6 +177,7 @@ class GameScene extends Scene {
     /**Add the tile map to the world */
     this.matter.world.convertTilemapLayer(this.worldLayer, {
       label: "world",
+      // isStatic: false
     });
     this.matter.world.convertTilemapLayer(this.trapLayer, { label: "trap" });
     this.matter.world.convertTilemapLayer(this.coinLayer, {
@@ -200,9 +201,9 @@ class GameScene extends Scene {
       key: 'fire',
       frames: this.anims.generateFrameNumbers('fire', {
         start: 0,
-        end: 5,
+        end: 4,
       }),
-      frameRate: 27,
+      frameRate: 24,
       repeat: -1
     });
     this.fire.anims.play('fire');
@@ -366,17 +367,21 @@ class GameScene extends Scene {
     //     this.pauseBg.setVisible(false);
     //   }
     // });
+  
+
+
   }
   update() {
-
+    console.log('Hi');
+    console.log(game.loop.actualFps)
     if(!this.bgSound.isPlaying){
       this.bgSound.play();
     }   
+    if(this.keys.up.isDown){
+      this.up();
+      }
     if(this.keys.down.isDown){
     this.down();
-    }
-    if(this.keys.up.isDown){
-    this.up();
     }
     if(this.keys.left.isDown){
     this.left();
@@ -384,13 +389,17 @@ class GameScene extends Scene {
     if(this.keys.right.isDown){
     this.right();
     }
-
+    /** Updating the text */
     this.scoreText.setText(`Score : ${this.score}`);
     this.lifeText.setText(`Life : ${this.life}`);
     if (this.life === 0) {
       this.sound.stopAll();
       this.scene.restart();
     }
+
+    // if(this.ball.x > 300){
+    //   console.log(1);
+    // }
 
     // if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
     //   this.rotateText.setText("Please rotate the screen to landscape!!");

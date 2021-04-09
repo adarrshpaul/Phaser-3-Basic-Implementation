@@ -67,13 +67,19 @@ class Preload extends Scene {
     this.load.audio('collision',"src/assets/AudioGame/collision.mp3");
     this.load.audio('wave',"src/assets/AudioGame/wave.mp3");
     this.load.audio('bg',"src/assets/AudioGame/untitled.mp3");
+    
+    /**FB Instant API will be using this info */
     this.load.on("progress", this.updateBar, {
       scene: this,
     });
+
   }
   /** This function is called everytime, any asset is loaded.
    */
   updateBar(percentage) {
+    /**Take this percentage and load the game */
+    window.FBInstant.setLoadingProgress(percentage * 100)
+
     //Adding Backgorund Color
     this.scene.add.image(0, 0, "PreloadBg").setOrigin(0);
     //Adding Title
@@ -108,6 +114,7 @@ class Preload extends Scene {
    @see Refer this resource https://photonstorm.github.io/phaser3-docs/Phaser.Loader.Events.html
   */
   complete() {
+    window.FBInstant.startGameAsync();
     this.scene.start("game_screen"); //After all the preload functionality is loaded then only, call the start the  next scene.
   }
   create() {}

@@ -12,3 +12,6 @@ node_modules/
 # Build
 dist/
 /npm-debug.log
+package.json
+key.pem
+cert.pem

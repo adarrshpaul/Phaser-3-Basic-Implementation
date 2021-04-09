@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open --hot --host 0.0.0.0",
+    "start": "webpack-dev-server --config webpack/base.js --open --hot --host 0.0.0.0 --https --cert cert.pem --key key.pem",
     "deploy": "gh-pages -d dist"
   },
   "repository": {
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "css-loader": "^3.6.0",
+    "http-server": "^0.12.3",
     "loader": "^2.1.1",
     "phaser": "^3.23.0",
     "style-loader": "^1.2.1",

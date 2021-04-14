@@ -31,10 +31,10 @@ const config = {
     default: "matter",
     matter: {
       gravity: { y: 0 },
-       debug: {
-         showBody: true,
-         showStaticBody: true,
-       },
+      //  debug: {
+      //    showBody: true,
+      //    showStaticBody: true,
+      //  },
     },
   },
 };

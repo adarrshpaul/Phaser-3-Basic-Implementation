@@ -43,7 +43,8 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'src/assets', to: 'src/assets' }
+        { from: 'src/assets', to: 'src/assets' },
+        {from: 'src/fbapp-config.json', to: 'fbapp-config.json'}
       ],
     }),
     // new workboxPlugin.GenerateSW({

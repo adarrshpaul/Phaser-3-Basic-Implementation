@@ -6,8 +6,126 @@ class GameScene extends Scene {
     super(sceneConfigGame);
   }
   create() {
-    /**Matter Physics */
+    /**Timer Default */
+    this.timerLimit = 60000;
+    /**Add Placement */
+    this.facebook.showVideo('CAROUSEL_IMG_SQUARE_APP_INSTALL');
+    this.facebook.on('adshowerror', function () {
+console.log('HIIII')
+      //  The ad for the given placement ID is no longer loaded
+  
+  });
+    /**Player's Stats */
+    this.score = 0;
+    this.life = 3;
+    
+    this.playerStats = {
+      'score': this.score,
+      'life': this.life,
+      'time': this.timerLimit/1000
+    };
+    /**Save these Stats to Facebook */
+  this.facebook.saveStats(this.playerStats);
+  /**Prompt the user to select a scope if the scope is SOLO */
+  if(window.FBInstant.context.getType() === 'SOLO'){
+    // this.facebook.chooseContext();
+    this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
+    this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
+  }else{
+    let leaderBoardString = 'timeleaderboardv3' + '.' + this.facebook.contextID;
+    this.facebook.getLeaderboard(leaderBoardString);
+    /**Adding the event listener to enable game*/
+    this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
+    this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
+  }
+
+
+   /**Add event-listener to handle success and failure*/ 
+   console.log('Default Context',window.FBInstant.context.getType());
+  this.facebook.on('choose',()=>{
+    console.log('Choose Success',window.FBInstant.context.getType())
+    let leaderBoardString = 'timeleaderboardv3' + '.' + this.facebook.contextID;
+    this.facebook.getLeaderboard(leaderBoardString);
+    /**Adding the event listener to enable game*/
+    this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
+    this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
+  }); 
+    
+  this.facebook.on('choosefail', ()=>{
+    console.log(window.FBInstant.context.getType());
+    /**Adding the event listener to enable game*/
+    this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
+    this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
+
+  });
+
+
+
+    /**Get the leaderBoard from Facebook*/
+      this.facebook.on('getleaderboard', (leaderboard)=> {
+        this.leaderboard = leaderboard;
+        console.log(this.leaderboard)
+        this.leaderboard.on('getscores',  (scores)=>{
+          console.log('Scores:',scores);
+        });
+        // this.leaderboard.on('setscore',(scores)=>{
+        //   console.log('SAVED !', scores);
+        // },this)
+        this.leaderboard.getScores();
+      },this);
+
+
+    /**Pause the timer at start */ 
+    this.gameTimer = this.time.addEvent({
+      delay: this.timerLimit, //ms
+      loop: false,
+      repeat: 0,
+      startAt: 0,
+      timeScale: 1,
+      paused: true
+  });
+
+    /**Add an BitMap Text : Tap to Play */
+    this.tapToPlay = this.add.text(game.config.width / 2, game.config.height / 2, 'TAP TO PLAY',{fontSize: "56px",
+    fontFamily: "roboto",
+    color: "#ffffff",
+    stroke: "#000000",
+    strokeThickness: 24,
+    shadow: {
+      offsetX: 3.7,
+      offsetY: 3.2,
+      color: "##0000FF",
+      blur: 40,
+      stroke: true,
+      fill: true,
+    },
+  }).setOrigin(0.5).setDepth(1000);
+    this.pauseBg = this.add.image(0, 0, "pauseBg").setOrigin(0).setDepth(999);
+    // this.pauseBg.setVisible(true);
+    
     this.bgSound = this.sound.add("bg");
+
+    // /**Adding the event listener to this */
+    // this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
+    // this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
+
+    this.timerText = this.add.text(game.config.width / 2, game.config.height / 2 - 400, this.gameTimer.getElapsedSeconds(),
+    {fontSize: "39px",
+    fontFamily: "serif",
+    color: "#ffffff",
+    stroke: "#000000",
+    strokeThickness: 10,
+    shadow: {
+      offsetX: 3.7,
+      offsetY: 3.2,
+      color: "##0000FF",
+      blur: 80,
+      stroke: true,
+      fill: true,
+    },
+  }).setDepth(1000);
+
+    /**Matter Physics */
     this.matter.world.update60Hz();
     this.matter.world.setBounds(
       0,
@@ -49,9 +167,8 @@ class GameScene extends Scene {
     this.bounce = this.sound.add("collision");
     this.passBy = this.sound.add('wave');
     /**Adding the score --- */
-    this.life = 3;
     this.lifeText = this.add
-      .text(10, 100, `Life : ${this.life}`, {
+      .text(10, game.config.height/2 - 400, `Life : ${this.life}`, {
         fontSize: "39px",
         fontFamily: "serif",
         color: "#ffffff",
@@ -68,9 +185,9 @@ class GameScene extends Scene {
       })
       .setScrollFactor(0, 0)
       .setDepth(1000);
-    this.score = 0;
+
     this.scoreText = this.add
-      .text(10, 40, `Score : ${this.score}`, {
+      .text(10, game.config.height/2 - 300, `Score : ${this.score}`, {
         fontSize: "39px",
         fontFamily: "serif",
         color: "#ffffff",
@@ -155,7 +272,7 @@ class GameScene extends Scene {
       this.coinLayer.fill(this.indexOfCoinTile, coinsX, 11, 1, 1);
       this.coinLayer.setCollision(this.indexOfCoinTile);
     }
-    let coinsX = Phaser.Math.Between(20, 30);
+    let coinsX = Phaser.Math.Between(27, 28);
     this.coinLayer.fill(this.indexOfCoinTile, coinsX, 11, 1, 1);
     this.coinLayer.setCollision(this.indexOfCoinTile); 
 
@@ -273,7 +390,18 @@ class GameScene extends Scene {
     this.upButton.on("pointerdown", () => {
       this.up();
     });
-
+    // this.leftButton.on("pointermove", () => {
+    //   this.left();
+    // });
+    // this.rightButton.on("pointermove", () => {
+    //   this.right();
+    // });
+    // this.downButton.on("pointermove", () => {
+    // this.down();
+    // });
+    // this.upButton.on("pointermove", () => {
+    //   this.up();
+    // });
     /** Setting the bounds of the camera */
     this.cameras.main.setBounds(
       0,
@@ -289,8 +417,6 @@ class GameScene extends Scene {
       1,
       game.config.width / 2 - this.ball.width //Offset
     );
-    this.pauseBg = this.add.image(0, 0, "pauseBg").setOrigin(0);
-    this.pauseBg.setVisible(false);
     /**The time */
     /**Decalring the rotate text */
     this.rotateText = this.add
@@ -344,39 +470,13 @@ class GameScene extends Scene {
       }
 
     });
-    // console.log(this.worldLayer)
-    // this.cameras.main.pan(
-    //   2200, 
-    //   this.ball.y - 1000,
-    //   3000,
-    //   "Expo.easeInOut"
-    // );
-    // this.cameras.main.zoomTo(2,3000,'Expo');
-    
-    // this.cameras.main.centerOn(this.ball.x,this.ball.y);
-
-    /**Listening to orientation changed */
-    // this.scale.on("orientationchange", (orientation) => {
-    //   if (orientation === Phaser.Scale.PORTRAIT) {
-    //     this.rotateText.setText("Please rotate the screen to landscape !!");
-    //     this.pauseBg.setVisible(true);
-    //     this.scene.pause();
-    //   } else if (orientation === Phaser.Scale.LANDSCAPE) {
-    //     this.scene.resume();
-    //     this.rotateText.setText("");
-    //     this.pauseBg.setVisible(false);
-    //   }
-    // });
   
-
-
   }
   update() {
-    console.log('Hi');
-    console.log(game.loop.actualFps)
-    if(!this.bgSound.isPlaying){
-      this.bgSound.play();
-    }   
+    let timerTime = this.timerLimit/1000 - this.gameTimer.getElapsedSeconds();
+
+    this.timerText.setText(timerTime.toFixed(2));
+
     if(this.keys.up.isDown){
       this.up();
       }
@@ -392,44 +492,90 @@ class GameScene extends Scene {
     /** Updating the text */
     this.scoreText.setText(`Score : ${this.score}`);
     this.lifeText.setText(`Life : ${this.life}`);
-    if (this.life === 0) {
-      this.sound.stopAll();
-      this.scene.restart();
-    }
-
-    // if(this.ball.x > 300){
-    //   console.log(1);
-    // }
-
-    // if (this.scale.orientation === Phaser.Scale.PORTRAIT) {
-    //   this.rotateText.setText("Please rotate the screen to landscape!!");
-    //   this.pauseBg.setVisible(true);
-    //   this.sound.stopAll();
-    //   this.scene.pause();
-    // }
   }
+
+  /**Update the Score */
   scoreUpdate(body) {
     this.score = this.score + 1;
-
     let positionX = body.position.x;
     let positionY = body.position.y;
     this.coinLayer.removeTileAtWorldXY(positionX, positionY);
     this.matter.world.remove(body);
     this.scoreSound.play();
+    /**Make changes in our game state */
+    this.playerStats.score = this.score;
+    /**Save the Stats */
+    let time = parseInt(this.gameTimer.getElapsedSeconds());
+    this.facebook.incStats({'score': 1, 'life': 0, 'time': -time});
+    /**If the score is 7 */
+    if(this.score === 7){
+      this.gameOver();
+    }
   }
+
+  /**Increase the life */
   lifeUp(body) {
     this.life = this.life + 1;
     console.log(body);
     this.lifeImage.destroy();
     this.scoreSound.play();
+    /**Make changes in our game state */
+    this.playerStats.life = this.life;
+    /**Save the stats */
+    let time = parseInt(this.gameTimer.getElapsedSeconds());
+    this.facebook.incStats({'score':0, 'life': 1, 'time': -time});
   }
+  /**Decrease the life and trigger gameOver, when the life is 0*/
   lifeUpdate(){
     this.life = this.life - 1;
     this.ball.x =  271;
     this.ball.y = 468;
     this.outSound.play();
+    /**Make changes in our game state */
+    this.playerStats.life= this.life;
+    /**Reduce the time */
+    this.gameTimer.timeScale = this.gameTimer.timeScale + 2;
+    /**Updating the stats */
+    let time = parseInt(this.gameTimer.getElapsedSeconds());
+    console.log(time);
+    this.facebook.incStats({'score':0, 'life': -1, 'time': -time});
+    if(this.life === 0){
+      this.gameOver();
+    }
   }
-  
+  /**Shut down all sounds, and  */
+  gameOver(){
+    let timerTime = this.gameTimer.getElapsedSeconds();
+    let timeInNumber = parseInt(timerTime);
+    this.gameTimer.paused = true;
+    this.sound.stopAll();
+    if(window.FBInstant.context.getType() !== 'SOLO'){
+      this.playerStats.score = this.score;
+      this.playerStats.life = this.life;
+      this.playerStats.time = timeInNumber;
+      console.log('Player Stats: ',this.playerStats);
+      this.resultScore = this.leaderboard.setScore(timeInNumber, this.playerStats);
+      this.leaderboard.on('setscore',(scores)=>{
+          console.log('SAVED !', scores);
+          this.scene.start('score_page_back');
+        },this);
+    }else{
+      /**Saving the stats for resume */
+      this.playerStats = {
+        'score': this.score,
+        'life': this.life,
+        'time': timeInNumber
+      };
+      console.log('playerDate',this.playerStats)
+      this.registry.set('score',this.score);
+      this.registry.set('life',this.life);
+      this.registry.set('time',timeInNumber);
+      
+      this.scene.start('score_page_back');
+    }
+
+  }
+
   up() {
     this.upSound.play();
     this.ball.setVelocityY(-29);

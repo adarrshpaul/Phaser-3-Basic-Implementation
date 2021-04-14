@@ -1,0 +1,6 @@
+1. Make a nice joystick.
+2. Sync details with facebook. 
+Make a leaderBoard, scene.
+3. Make a share feature.
+
+Add fake ads, 

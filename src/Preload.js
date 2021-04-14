@@ -8,7 +8,16 @@ class Preload extends Scene {
     console.log("Preload");
   }
   preload() {
+    /**Add Facecbook Ads */
+    this.facebook.preloadVideoAds('CAROUSEL_IMG_SQUARE_APP_INSTALL');
+    this.facebook.on('adloaded', function (ad) {
+      console.log(ad)
+  });
 
+    /**Facebook Instant Games - configuration */
+    this.facebook.once('startgame', this.complete, this);
+    this.facebook.showLoadProgress(this);
+    
     this.load.image("ball", "src/assets/GraphicsGame/GamePlay/redball.png");
 
     this.load.image(
@@ -37,6 +46,7 @@ class Preload extends Scene {
     );
 
     /**Assets for game resume, and pause */
+    this.load.image('playButton', 'src/assets/GraphicsGame/MenuPage/PLAY.png' );
     this.load.image("pause", "src/assets/GraphicsGame/MenuPage/PAUSE.png");
     this.load.image("resume", "src/assets/GraphicsGame/MenuPage/RESUME.png");
     this.load.image("pauseBg", "src/assets/GraphicsGame/MenuPage/PauseBg.png");
@@ -68,6 +78,8 @@ class Preload extends Scene {
     this.load.audio('wave',"src/assets/AudioGame/wave.mp3");
     this.load.audio('bg',"src/assets/AudioGame/untitled.mp3");
     
+    /**Add Fonts */
+    // this.load.bitmapFont('HeadingFont', "src/assets/Fonts/04B_30__.TTF");
     /**FB Instant API will be using this info */
     this.load.on("progress", this.updateBar, {
       scene: this,
@@ -78,7 +90,6 @@ class Preload extends Scene {
    */
   updateBar(percentage) {
     /**Take this percentage and load the game */
-    window.FBInstant.setLoadingProgress(percentage * 100)
 
     //Adding Backgorund Color
     this.scene.add.image(0, 0, "PreloadBg").setOrigin(0);
@@ -90,23 +101,22 @@ class Preload extends Scene {
       "Loading"
     );
     loadingText.setScale(0.2);
-
-    //Adding Loading Bar.
-    this.loadingBarBgX = game.config.width / 2 - 600;
-    this.loadingBarBgY = game.config.height / 2 + 100;
-    this.loadingBar = this.scene.add
-      .image(this.loadingBarBgX - 122, this.loadingBarBgY, "LoadingBar")
-      .setScale(1.59, 2.3)
-      .setOrigin(0, 0);
-     // this.loadingBar.scaleX=percentage;
-    this.loadingBar.setCrop(0, 0, 1000 * percentage, 200);
-    percentage = percentage * 100;
+    // //Adding Loading Bar.
+    // this.loadingBarBgX = game.config.width / 2 - 600;
+    // this.loadingBarBgY = game.config.height / 2 + 100;
+    // this.loadingBar = this.scene.add
+    //   .image(this.loadingBarBgX - 122, this.loadingBarBgY, "LoadingBar")
+    //   .setScale(1.59, 2.3)
+    //   .setOrigin(0, 0);
+    //  // this.loadingBar.scaleX=percentage;
+    // this.loadingBar.setCrop(0, 0, 1000 * percentage, 200);
+    // percentage = percentage * 100;
     
-    //Adding Loading Bar Bg
-    var loadingBarBg = this.scene.add
-      .image(this.loadingBarBgX - 136, this.loadingBarBgY - 17, "LoadingBarBg")
-      .setScale(1.6, 2.3)
-      .setOrigin(0, 0);
+    // //Adding Loading Bar Bg
+    // var loadingBarBg = this.scene.add
+    //   .image(this.loadingBarBgX - 136, this.loadingBarBgY - 17, "LoadingBarBg")
+    //   .setScale(1.6, 2.3)
+    //   .setOrigin(0, 0);
 
     console.log("Loading..." + percentage);
   }
@@ -114,12 +124,9 @@ class Preload extends Scene {
    @see Refer this resource https://photonstorm.github.io/phaser3-docs/Phaser.Loader.Events.html
   */
   complete() {
-    window.FBInstant.startGameAsync();
-    this.scene.start("game_screen"); //After all the preload functionality is loaded then only, call the start the  next scene.
+    this.scene.start("menu_page"); //After all the preload functionality is loaded then only, call the start the  next scene.
   }
   create() {}
-  update() {
-    this.complete();
-  }
+  update() {}
 }
 export default Preload;

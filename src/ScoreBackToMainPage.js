@@ -62,11 +62,9 @@ class ScoreBackToMainPage extends Scene {
               this.facebook.chooseContext();
       });
       this.facebook.on('choose',()=>{
-        this.facebook.quit();
         this.scene.start('game_screen');
       });
       this.facebook.on('choosefail', ()=>{
-        this.facebook.quit();
         this.scene.start('game_screen');
       });
 

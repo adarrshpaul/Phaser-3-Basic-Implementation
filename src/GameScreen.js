@@ -7,14 +7,28 @@ class GameScene extends Scene {
   }
   create() {
     /**Timer Default */
+
     this.timerLimit = 60000;
-    /**Add Placement */
-    this.facebook.showVideo('CAROUSEL_IMG_SQUARE_APP_INSTALL');
-    this.facebook.on('adshowerror', function () {
-console.log('HIIII')
-      //  The ad for the given placement ID is no longer loaded
-  
-  });
+    /**--------------------------------------------------------------------------------------------------------- */
+    /**Preload the Placement for facebook */
+    this.input.once('pointerdown', () => {
+      this.facebook.preloadVideoAds('475264606855958_479551169760635');
+      this.facebook.on('adloaded', function (ad) {
+        console.log('loaded !',ad);
+        //  The ad has preloaded successfully.
+    
+    });
+    
+    this.facebook.on('adsnofill', function (placementID) {
+    console.log('Fail !',placementID);
+        //  There is no ad inventory available for this placement ID.
+        //  Either skip displaying ads in your game, or display something else.
+    
+    });
+    })
+
+
+  /**--------------------------------------------------------------------------------------------------------- */
     /**Player's Stats */
     this.score = 0;
     this.life = 3;
@@ -25,8 +39,11 @@ console.log('HIIII')
       'time': this.timerLimit/1000
     };
     /**Save these Stats to Facebook */
+
   this.facebook.saveStats(this.playerStats);
+
   /**Prompt the user to select a scope if the scope is SOLO */
+
   if(window.FBInstant.context.getType() === 'SOLO'){
     // this.facebook.chooseContext();
     this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
@@ -38,7 +55,6 @@ console.log('HIIII')
     this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
     this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
   }
-
 
    /**Add event-listener to handle success and failure*/ 
    console.log('Default Context',window.FBInstant.context.getType());
@@ -52,14 +68,13 @@ console.log('HIIII')
   }); 
     
   this.facebook.on('choosefail', ()=>{
+    this.facebook.contextTypey
     console.log(window.FBInstant.context.getType());
     /**Adding the event listener to enable game*/
     this.input.once('pointerdown',()=>{this.gameTimer.paused = false; this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play();});
     this.input.keyboard.once('keydown',()=>{this.gameTimer.paused = false;this.pauseBg.setVisible(false); this.tapToPlay.destroy();this.bgSound.play()});
 
   });
-
-
 
     /**Get the leaderBoard from Facebook*/
       this.facebook.on('getleaderboard', (leaderboard)=> {
@@ -539,8 +554,21 @@ console.log('HIIII')
     let time = parseInt(this.gameTimer.getElapsedSeconds());
     console.log(time);
     this.facebook.incStats({'score':0, 'life': -1, 'time': -time});
-    if(this.life === 0){
-      this.gameOver();
+    if (this.life === 0) {
+      /**Pause the timer */
+      this.gameTimer.paused = true;
+      /** Show the ad */
+      this.facebook.showVideo('475264606855958_479551169760635');
+      this.facebook.on('adfinished', () => {
+        this.life = 1;
+        this.gameTimer.paused = false;
+      });
+      this.facebook.on('adshowerror', () => {
+
+        this.gameOver();
+
+      });
+
     }
   }
   /**Shut down all sounds, and  */

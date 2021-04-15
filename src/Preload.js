@@ -8,11 +8,6 @@ class Preload extends Scene {
     console.log("Preload");
   }
   preload() {
-    /**Add Facecbook Ads */
-    this.facebook.preloadVideoAds('CAROUSEL_IMG_SQUARE_APP_INSTALL');
-    this.facebook.on('adloaded', function (ad) {
-      console.log(ad)
-  });
 
     /**Facebook Instant Games - configuration */
     this.facebook.once('startgame', this.complete, this);
@@ -126,7 +121,9 @@ class Preload extends Scene {
   complete() {
     this.scene.start("menu_page"); //After all the preload functionality is loaded then only, call the start the  next scene.
   }
-  create() {}
+  create() {
+
+  }
   update() {}
 }
 export default Preload;

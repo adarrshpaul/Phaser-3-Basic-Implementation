@@ -15,17 +15,11 @@
             "th_TH": "\\u{0E22}\\u{0E28}"
           },
           "fallback": "Rank"
-        },
-        "values": {
-          "0": "Unranked",
-          "1": "Bronze",
-          "2": "Silver",
-          "3": "Gold"
         }
       }
     },
-    "orientation": "PORTRAIT",
-    "override_web_orientation": "LANDSCAPE",
+    "orientation": "LANDSCAPE",
+    "override_web_orientation": "POTRAIT",
     "navigation_menu_version": "NAV_BAR",
     "match_player_config": {
       "min_context_size": 2,

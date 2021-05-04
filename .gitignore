@@ -15,3 +15,4 @@ dist/
 package.json
 key.pem
 cert.pem
+dist.zip

@@ -15,6 +15,12 @@
             "th_TH": "\\u{0E22}\\u{0E28}"
           },
           "fallback": "Rank"
+        },
+        "values": {
+          "0": "Unranked",
+          "1": "Bronze",
+          "2": "Silver",
+          "3": "Gold"
         }
       }
     },

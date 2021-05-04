@@ -1,4 +1,4 @@
-import { FacebookInstantGamesPlugin, Game } from "phaser";
+import { Game } from "phaser";
 import { config } from "./config.js";
 import "./index.css";
 var game;

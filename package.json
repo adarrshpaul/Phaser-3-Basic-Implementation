@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open --hot --host 0.0.0.0 --https --cert cert.pem --key key.pem",
+    "start": "webpack-dev-server --config webpack/base.js --open --hot --host 0.0.0.0 --inline false --https --cert cert.pem --key key.pem",
     "deploy": "gh-pages -d dist"
   },
   "repository": {

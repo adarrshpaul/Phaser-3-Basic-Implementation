@@ -1,4 +1,4 @@
-# Games Ball
+# Basic Phaser 3 Game !
 
 A simple ball game developed using Phaser.
 
@@ -18,7 +18,7 @@ Now open your browser and go to http://127.0.0.1:8080
 
 ### Here is a live demo of the game.
 
-https://adarrshpaul.github.io/games_ball/
+https://adarrshpaul.github.io/Phaser-3-Basic-Implementation/
 
 ### License
 

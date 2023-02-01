@@ -41,6 +41,6 @@
     "loader": "^2.1.1",
     "phaser": "^3.23.0",
     "style-loader": "^1.2.1",
-    "tile-extruder": "^2.0.6"
+    "tile-extruder": "^2.1.0"
   }
 }

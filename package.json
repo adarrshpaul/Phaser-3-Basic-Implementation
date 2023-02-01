@@ -39,7 +39,7 @@
   "dependencies": {
     "css-loader": "^3.6.0",
     "loader": "^2.1.1",
-    "phaser": "^3.23.0",
+    "phaser": "^3.55.2",
     "style-loader": "^1.2.1",
     "tile-extruder": "^2.0.6"
   }
